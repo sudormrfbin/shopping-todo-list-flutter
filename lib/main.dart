@@ -72,6 +72,7 @@ class _ShoppingItemListState extends State<ShoppingItemList> {
                 item: item,
                 onButtonTap: _handleItemDelete,
                 onLongPress: _handleItemSelect,
+                onTap: _handleItemTap,
                 selected: _multiSelection.contains(index),
                 showDeleteIcon: _multiSelection.isEmpty,
               );
@@ -171,6 +172,12 @@ class _ShoppingItemListState extends State<ShoppingItemList> {
     }
     setState(() => _multiSelection.insert(insertAt, todoIndex));
   }
+
+  _handleItemTap(ShoppingItem item) {
+    if (_multiSelection.isNotEmpty) {
+      _handleItemSelect(item);
+    }
+  }
 }
 
 class ShoppingItem {
@@ -184,6 +191,7 @@ class ShoppingItemWidget extends StatelessWidget {
   final ShoppingItem item;
   final Function(ShoppingItem) onButtonTap;
   final Function(ShoppingItem) onLongPress;
+  final Function(ShoppingItem) onTap;
   final bool selected;
   final bool showDeleteIcon;
 
@@ -192,6 +200,7 @@ class ShoppingItemWidget extends StatelessWidget {
     required this.item,
     required this.onButtonTap,
     required this.onLongPress,
+    required this.onTap,
     required this.selected,
     required this.showDeleteIcon,
   }) : super(key: key);
@@ -209,6 +218,7 @@ class ShoppingItemWidget extends StatelessWidget {
             )
           : null,
       onLongPress: () => onLongPress(item),
+      onTap: () => onTap(item),
       selected: selected,
       selectedTileColor: Theme.of(context).selectedRowColor,
     );
