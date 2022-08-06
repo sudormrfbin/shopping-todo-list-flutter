@@ -115,6 +115,7 @@ class _ShoppingItemListState extends State<ShoppingItemList> {
             return AlertDialog(
               title: const Text('Add new item'),
               content: TextField(
+                autofocus: true,
                 controller: _newItemTextController,
                 decoration: InputDecoration(
                   hintText: 'New item',
