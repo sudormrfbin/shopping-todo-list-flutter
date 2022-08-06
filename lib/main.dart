@@ -79,16 +79,18 @@ class _ShoppingItemListState extends State<ShoppingItemList> {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _displayDialog().then((_) {
-            setState(() => _newItemTextController.text = "");
-            setState(() => _newItemError = null);
-          });
-        },
-        tooltip: 'Add shopping item',
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _multiSelection.isEmpty
+          ? FloatingActionButton(
+              onPressed: () {
+                _displayDialog().then((_) {
+                  setState(() => _newItemTextController.text = "");
+                  setState(() => _newItemError = null);
+                });
+              },
+              tooltip: 'Add shopping item',
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 
