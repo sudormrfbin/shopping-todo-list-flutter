@@ -73,21 +73,21 @@ class _TodoListState extends State<TodoList> {
 
   void _addTodoItem(String text) {
     setState(() {
-      _todos.add(Todo(name: text, checked: false));
+      _todos.add(Todo(name: text, done: false));
     });
     _textController.clear();
   }
 
   void _handleTodoChange(Todo todo, bool newVal) {
-    setState(() => todo.checked = newVal);
+    setState(() => todo.done = newVal);
   }
 }
 
 class Todo {
   final String name;
-  bool checked;
+  bool done;
 
-  Todo({required this.name, required this.checked});
+  Todo({required this.name, required this.done});
 }
 
 class TodoItem extends StatelessWidget {
@@ -98,7 +98,7 @@ class TodoItem extends StatelessWidget {
       : super(key: key);
 
   TextStyle? _getTextStyle() {
-    if (!todo.checked) return null;
+    if (!todo.done) return null;
 
     return const TextStyle(color: Colors.black38, decoration: TextDecoration.lineThrough);
   }
@@ -107,7 +107,7 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return CheckboxListTile(
         onChanged: (newVal) => onTodoChanged(todo, newVal ?? false),
-        value: todo.checked,
+        value: todo.done,
         controlAffinity: ListTileControlAffinity.leading,
         title: Text(todo.name, style: _getTextStyle(),));
   }
