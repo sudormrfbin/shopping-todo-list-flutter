@@ -12,6 +12,7 @@ class TodoApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Shopping List',
       home: TodoList(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
