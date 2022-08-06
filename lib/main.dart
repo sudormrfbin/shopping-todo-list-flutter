@@ -208,6 +208,7 @@ class ShoppingItemWidget extends StatelessWidget {
           : null,
       onLongPress: () => onLongPress(item),
       selected: selected,
+      selectedTileColor: Theme.of(context).selectedRowColor,
     );
   }
 }
