@@ -33,12 +33,26 @@ class _TodoListState extends State<TodoList> {
   final _newItemTextController = TextEditingController();
   NewItemError? _newItemError;
   final List<Todo> _todos = [];
+  final List<int> _multiSelection = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shopping List'),
+        actions: [
+          if (_multiSelection.isNotEmpty) ...[
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _multiSelection.reversed.forEach(_todos.removeAt);
+                  _multiSelection.clear();
+                });
+              },
+              icon: const Icon(Icons.delete),
+            )
+          ]
+        ],
       ),
       body: Builder(builder: (context) {
         if (_todos.isEmpty) {
@@ -57,6 +71,8 @@ class _TodoListState extends State<TodoList> {
               return TodoItem(
                 todo: todo,
                 onButtonTap: _handleTodoDelete,
+                onLongPress: _handleTodoSelect,
+                selected: _multiSelection.contains(index),
               );
             }),
           );
@@ -137,6 +153,21 @@ class _TodoListState extends State<TodoList> {
   void _handleTodoDelete(Todo todo) {
     setState(() => _todos.remove(todo));
   }
+
+  _handleTodoSelect(Todo todo) {
+    final todoIndex = _todos.indexOf(todo);
+    final idx = _multiSelection.indexOf(todoIndex);
+    if (idx != -1) {
+      setState(() => _multiSelection.removeAt(idx));
+      return;
+    }
+
+    int insertAt = _multiSelection.indexWhere((item) => todoIndex < item);
+    if (insertAt == -1) {
+      insertAt = 0;
+    }
+    setState(() => _multiSelection.insert(insertAt, todoIndex));
+  }
 }
 
 class Todo {
@@ -149,19 +180,29 @@ class Todo {
 class TodoItem extends StatelessWidget {
   final Todo todo;
   final Function(Todo) onButtonTap;
+  final Function(Todo) onLongPress;
+  final bool selected;
 
-  const TodoItem({Key? key, required this.todo, required this.onButtonTap})
-      : super(key: key);
+  const TodoItem({
+    Key? key,
+    required this.todo,
+    required this.onButtonTap,
+    required this.onLongPress,
+    required this.selected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        title: Text(
-          todo.name,
-        ),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () => onButtonTap(todo),
-        ));
+      title: Text(
+        todo.name,
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: () => onButtonTap(todo),
+      ),
+      onLongPress: () => onLongPress(todo),
+      selected: selected,
+    );
   }
 }
