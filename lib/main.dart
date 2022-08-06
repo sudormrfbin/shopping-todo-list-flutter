@@ -39,7 +39,7 @@ class _TodoListState extends State<TodoList> {
           final todo = _todos[index];
           return TodoItem(
             todo: todo,
-            onTodoChanged: _handleTodoChange,
+            onButtonTap: _handleTodoDelete,
           );
         }),
       ),
@@ -80,8 +80,8 @@ class _TodoListState extends State<TodoList> {
     _textController.clear();
   }
 
-  void _handleTodoChange(Todo todo, bool newVal) {
-    setState(() => todo.done = newVal);
+  void _handleTodoDelete(Todo todo) {
+    setState(() => _todos.remove(todo));
   }
 }
 
@@ -94,27 +94,20 @@ class Todo {
 
 class TodoItem extends StatelessWidget {
   final Todo todo;
-  final Function(Todo, bool) onTodoChanged;
+  final Function(Todo) onButtonTap;
 
-  const TodoItem({Key? key, required this.todo, required this.onTodoChanged})
+  const TodoItem({Key? key, required this.todo, required this.onButtonTap})
       : super(key: key);
-
-  TextStyle? _getTextStyle() {
-    if (!todo.done) return null;
-
-    return const TextStyle(
-        color: Colors.black38, decoration: TextDecoration.lineThrough);
-  }
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-        onChanged: (newVal) => onTodoChanged(todo, newVal ?? false),
-        value: todo.done,
-        controlAffinity: ListTileControlAffinity.leading,
+    return ListTile(
         title: Text(
           todo.name,
-          style: _getTextStyle(),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () => onButtonTap(todo),
         ));
   }
 }
