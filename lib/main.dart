@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const TodoApp());
+  runApp(const ShoppingListApp());
 }
 
-class TodoApp extends StatelessWidget {
-  const TodoApp({Key? key}) : super(key: key);
+class ShoppingListApp extends StatelessWidget {
+  const ShoppingListApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Shopping List',
-      home: TodoList(),
+      home: ShoppingItemList(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class TodoList extends StatefulWidget {
-  const TodoList({Key? key}) : super(key: key);
+class ShoppingItemList extends StatefulWidget {
+  const ShoppingItemList({Key? key}) : super(key: key);
 
   @override
-  State<TodoList> createState() => _TodoListState();
+  State<ShoppingItemList> createState() => _ShoppingItemListState();
 }
 
 enum NewItemError {
@@ -29,10 +29,10 @@ enum NewItemError {
   itemAlreadyExists,
 }
 
-class _TodoListState extends State<TodoList> {
+class _ShoppingItemListState extends State<ShoppingItemList> {
   final _newItemTextController = TextEditingController();
   NewItemError? _newItemError;
-  final List<Todo> _todos = [];
+  final List<ShoppingItem> _items = [];
   final List<int> _multiSelection = [];
 
   @override
@@ -45,7 +45,7 @@ class _TodoListState extends State<TodoList> {
             IconButton(
               onPressed: () {
                 setState(() {
-                  _multiSelection.reversed.forEach(_todos.removeAt);
+                  _multiSelection.reversed.forEach(_items.removeAt);
                   _multiSelection.clear();
                 });
               },
@@ -55,7 +55,7 @@ class _TodoListState extends State<TodoList> {
         ],
       ),
       body: Builder(builder: (context) {
-        if (_todos.isEmpty) {
+        if (_items.isEmpty) {
           return const Center(
             child: Text(
               "Add an item to your shopping list to get started.",
@@ -65,13 +65,13 @@ class _TodoListState extends State<TodoList> {
           );
         } else {
           return ListView.builder(
-            itemCount: _todos.length,
+            itemCount: _items.length,
             itemBuilder: ((context, index) {
-              final todo = _todos[index];
-              return TodoItem(
-                todo: todo,
-                onButtonTap: _handleTodoDelete,
-                onLongPress: _handleTodoSelect,
+              final item = _items[index];
+              return ShoppingItemWidget(
+                item: item,
+                onButtonTap: _handleItemDelete,
+                onLongPress: _handleItemSelect,
                 selected: _multiSelection.contains(index),
                 showDeleteIcon: _multiSelection.isEmpty,
               );
@@ -126,7 +126,7 @@ class _TodoListState extends State<TodoList> {
                         setState(() => _newItemError = NewItemError.emptyInput);
                         return;
                       }
-                      if (_todos.indexWhere((todo) => todo.name == text) !=
+                      if (_items.indexWhere((item) => item.name == text) !=
                           -1) {
                         setState(() =>
                             _newItemError = NewItemError.itemAlreadyExists);
@@ -135,7 +135,7 @@ class _TodoListState extends State<TodoList> {
 
                       Navigator.of(context).pop();
                       _newItemError = null;
-                      _addTodoItem(_newItemTextController.text);
+                      _addItem(_newItemTextController.text);
                     },
                     child: const Text('Add')),
               ],
@@ -144,19 +144,19 @@ class _TodoListState extends State<TodoList> {
         });
   }
 
-  void _addTodoItem(String text) {
+  void _addItem(String text) {
     setState(() {
-      _todos.add(Todo(name: text, done: false));
+      _items.add(ShoppingItem(name: text, done: false));
     });
     _newItemTextController.clear();
   }
 
-  void _handleTodoDelete(Todo todo) {
-    setState(() => _todos.remove(todo));
+  void _handleItemDelete(ShoppingItem item) {
+    setState(() => _items.remove(item));
   }
 
-  _handleTodoSelect(Todo todo) {
-    final todoIndex = _todos.indexOf(todo);
+  _handleItemSelect(ShoppingItem todo) {
+    final todoIndex = _items.indexOf(todo);
     final idx = _multiSelection.indexOf(todoIndex);
     if (idx != -1) {
       setState(() => _multiSelection.removeAt(idx));
@@ -171,23 +171,23 @@ class _TodoListState extends State<TodoList> {
   }
 }
 
-class Todo {
+class ShoppingItem {
   final String name;
   bool done;
 
-  Todo({required this.name, required this.done});
+  ShoppingItem({required this.name, required this.done});
 }
 
-class TodoItem extends StatelessWidget {
-  final Todo todo;
-  final Function(Todo) onButtonTap;
-  final Function(Todo) onLongPress;
+class ShoppingItemWidget extends StatelessWidget {
+  final ShoppingItem item;
+  final Function(ShoppingItem) onButtonTap;
+  final Function(ShoppingItem) onLongPress;
   final bool selected;
   final bool showDeleteIcon;
 
-  const TodoItem({
+  const ShoppingItemWidget({
     Key? key,
-    required this.todo,
+    required this.item,
     required this.onButtonTap,
     required this.onLongPress,
     required this.selected,
@@ -198,15 +198,15 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        todo.name,
+        item.name,
       ),
       trailing: showDeleteIcon
           ? IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () => onButtonTap(todo),
+              onPressed: () => onButtonTap(item),
             )
           : null,
-      onLongPress: () => onLongPress(todo),
+      onLongPress: () => onLongPress(item),
       selected: selected,
     );
   }
