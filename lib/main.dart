@@ -39,16 +39,28 @@ class _TodoListState extends State<TodoList> {
       appBar: AppBar(
         title: const Text('Shopping List'),
       ),
-      body: ListView.builder(
-        itemCount: _todos.length,
-        itemBuilder: ((context, index) {
-          final todo = _todos[index];
-          return TodoItem(
-            todo: todo,
-            onButtonTap: _handleTodoDelete,
+      body: Builder(builder: (context) {
+        if (_todos.isEmpty) {
+          return const Center(
+            child: Text(
+              "Add an item to your shopping list to get started.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black38),
+            ),
           );
-        }),
-      ),
+        } else {
+          return ListView.builder(
+            itemCount: _todos.length,
+            itemBuilder: ((context, index) {
+              final todo = _todos[index];
+              return TodoItem(
+                todo: todo,
+                onButtonTap: _handleTodoDelete,
+              );
+            }),
+          );
+        }
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _displayDialog().then((_) {
