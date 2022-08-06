@@ -10,7 +10,7 @@ class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Todo List',
+      title: 'Shopping List',
       home: TodoList(),
     );
   }
@@ -31,15 +31,17 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: const Text('Shopping List'),
       ),
-      body: ListView(
-        children: _todos
-            .map((todo) => TodoItem(
-                  todo: todo,
-                  onTodoChanged: _handleTodoChange,
-                ))
-            .toList(),
+      body: ListView.builder(
+        itemCount: _todos.length,
+        itemBuilder: ((context, index) {
+          final todo = _todos[index];
+          return TodoItem(
+            todo: todo,
+            onTodoChanged: _handleTodoChange,
+          );
+        }),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayDialog(),
@@ -100,7 +102,8 @@ class TodoItem extends StatelessWidget {
   TextStyle? _getTextStyle() {
     if (!todo.done) return null;
 
-    return const TextStyle(color: Colors.black38, decoration: TextDecoration.lineThrough);
+    return const TextStyle(
+        color: Colors.black38, decoration: TextDecoration.lineThrough);
   }
 
   @override
@@ -109,6 +112,9 @@ class TodoItem extends StatelessWidget {
         onChanged: (newVal) => onTodoChanged(todo, newVal ?? false),
         value: todo.done,
         controlAffinity: ListTileControlAffinity.leading,
-        title: Text(todo.name, style: _getTextStyle(),));
+        title: Text(
+          todo.name,
+          style: _getTextStyle(),
+        ));
   }
 }
