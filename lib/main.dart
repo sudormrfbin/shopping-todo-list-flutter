@@ -45,7 +45,7 @@ class _TodoListState extends State<TodoList> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _displayDialog(),
-        tooltip: 'Add Item',
+        tooltip: 'Add shopping item',
         child: const Icon(Icons.add),
       ),
     );
@@ -56,10 +56,10 @@ class _TodoListState extends State<TodoList> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Add new todo'),
+            title: const Text('Add new item'),
             content: TextField(
               controller: _textController,
-              decoration: const InputDecoration(hintText: 'New todo'),
+              decoration: const InputDecoration(hintText: 'New item'),
             ),
             actions: [
               TextButton(
