@@ -73,6 +73,7 @@ class _TodoListState extends State<TodoList> {
                 onButtonTap: _handleTodoDelete,
                 onLongPress: _handleTodoSelect,
                 selected: _multiSelection.contains(index),
+                showDeleteIcon: _multiSelection.isEmpty,
               );
             }),
           );
@@ -182,6 +183,7 @@ class TodoItem extends StatelessWidget {
   final Function(Todo) onButtonTap;
   final Function(Todo) onLongPress;
   final bool selected;
+  final bool showDeleteIcon;
 
   const TodoItem({
     Key? key,
@@ -189,6 +191,7 @@ class TodoItem extends StatelessWidget {
     required this.onButtonTap,
     required this.onLongPress,
     required this.selected,
+    required this.showDeleteIcon,
   }) : super(key: key);
 
   @override
@@ -197,10 +200,12 @@ class TodoItem extends StatelessWidget {
       title: Text(
         todo.name,
       ),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () => onButtonTap(todo),
-      ),
+      trailing: showDeleteIcon
+          ? IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => onButtonTap(todo),
+            )
+          : null,
       onLongPress: () => onLongPress(todo),
       selected: selected,
     );
