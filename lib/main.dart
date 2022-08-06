@@ -29,7 +29,7 @@ enum NewItemError {
 }
 
 class _TodoListState extends State<TodoList> {
-  final _textController = TextEditingController();
+  final _newItemTextController = TextEditingController();
   NewItemError? _newItemError;
   final List<Todo> _todos = [];
 
@@ -52,7 +52,7 @@ class _TodoListState extends State<TodoList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _displayDialog().then((_) {
-            setState(() => _textController.text = "");
+            setState(() => _newItemTextController.text = "");
             setState(() => _newItemError = null);
           });
         },
@@ -82,7 +82,7 @@ class _TodoListState extends State<TodoList> {
             return AlertDialog(
               title: const Text('Add new item'),
               content: TextField(
-                controller: _textController,
+                controller: _newItemTextController,
                 decoration: InputDecoration(
                   hintText: 'New item',
                   errorText: errorText,
@@ -91,7 +91,7 @@ class _TodoListState extends State<TodoList> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      final text = _textController.text;
+                      final text = _newItemTextController.text;
                       if (text.isEmpty) {
                         setState(() => _newItemError = NewItemError.emptyInput);
                         return;
@@ -105,7 +105,7 @@ class _TodoListState extends State<TodoList> {
 
                       Navigator.of(context).pop();
                       _newItemError = null;
-                      _addTodoItem(_textController.text);
+                      _addTodoItem(_newItemTextController.text);
                     },
                     child: const Text('Add')),
               ],
@@ -118,7 +118,7 @@ class _TodoListState extends State<TodoList> {
     setState(() {
       _todos.add(Todo(name: text, done: false));
     });
-    _textController.clear();
+    _newItemTextController.clear();
   }
 
   void _handleTodoDelete(Todo todo) {
