@@ -15,7 +15,7 @@ A simple flutter app which manages a shopping list.
 
 ## Installing
 
-Install by any of the methods below:
+Install by **any one** of the methods below:
 
 - Download the APK from [releases].
 - Run `flutter build` after cloning the repo to get an APK.
