@@ -1,16 +1,12 @@
-# katalyst_sample_shopping_list
+# Shopping List Todo Flutter App
 
-A new Flutter project.
+A simple flutter app which manages a shopping list.
 
-## Getting Started
+| Empty List | Adding Items | List With Items | Multi Selecting Items |
+| --- | --- | ---- | --- |
+| ![empty-list] | ![item-add] | ![list-with-items] | ![multi-selecting-items] |
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[empty-list]: ./images/empty-list.jpeg
+[item-add]: ./images/item-add.jpeg
+[list-with-items]: ./images/list-with-items.jpeg
+[multi-selecting-items]: ./images/multi-selecting-items.jpeg
